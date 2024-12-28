@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://b53dbl6eu3pnt"]
+
+[ext_resource type="Script" path="res://Source/KernelInterface.cs" id="1_hybe5"]
+[ext_resource type="FontFile" uid="uid://bu4mjmmgeh0dh" path="res://built-in/res/bios_font.ttf" id="2_l4h5o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n7ny0"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="KernelInterface" type="Node"]
+script = ExtResource("1_hybe5")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 3296.0
+offset_bottom = 2264.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_n7ny0")
+
+[node name="OutputStream" type="RichTextLabel" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_fonts/normal_font = ExtResource("2_l4h5o")
+theme_override_fonts/mono_font = ExtResource("2_l4h5o")
+theme_override_fonts/italics_font = ExtResource("2_l4h5o")
+theme_override_fonts/bold_italics_font = ExtResource("2_l4h5o")
+theme_override_fonts/bold_font = ExtResource("2_l4h5o")
+bbcode_enabled = true
+scroll_following = true
+tab_size = 2

@@ -1,0 +1,18 @@
+// Todo
+// ** « Access » function												050%
+// !! Server Access															000%
+// !! Client Access															000%
+// !! Kernel Optimizer													010%
+// !! Compiler Template 												000%
+// !! Optimize « Cig » 													000%
+// !! Add Terminal 															020%
+// !! WCI Interface 														000%
+// ** Default themes (2)												050%
+// ** System Security														050%
+// ** StdOut Module's optimization 							070%
+// !! Finish API (GDScript API)									020%
+// !! Finish API (C# API)												010%
+// ** Migrate GDScript API's backend to C# 			100%
+// !! « echo » command                          000%
+// !! wcshell                                   000%
+// !! onready.??                                000%

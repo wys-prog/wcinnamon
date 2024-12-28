@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr30aijxk0kdg"]
+
+[ext_resource type="Script" path="res://built-in/app/notepad/Notepad.cs" id="1_fohxr"]
+[ext_resource type="Script" path="res://built-in/app/notepad/Container.cs" id="2_th5ei"]
+
+[node name="notepad" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fohxr")
+
+[node name="Window" type="Window" parent="."]
+title = "notepad"
+position = Vector2i(0, 36)
+size = Vector2i(450, 295)
+
+[node name="Container" type="TabContainer" parent="Window"]
+offset_right = 450.0
+offset_bottom = 295.0
+script = ExtResource("2_th5ei")
+
+[node name="FileDialog" type="FileDialog" parent="Window"]
+title = "Open File(s)"
+position = Vector2i(25, 50)
+size = Vector2i(517, 380)
+ok_button_text = "Open"
+file_mode = 1
+access = 2
+show_hidden_files = true
+
+[connection signal="close_requested" from="Window" to="." method="OnWindowCloseRequested"]
+[connection signal="files_dropped" from="Window" to="." method="OnWindowFilesDropped"]
+[connection signal="window_input" from="Window" to="." method="OnWindowInput"]
+[connection signal="resized" from="Window/Container" to="Window/Container" method="OnContainerResized"]
+[connection signal="files_selected" from="Window/FileDialog" to="." method="OnFilesSelected"]
