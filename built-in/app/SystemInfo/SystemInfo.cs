@@ -7,7 +7,7 @@ namespace Wcinnamon.BuiltIn.App.SystemInfo;
 
 public partial class SystemInfo : Node
 {
-	public string[] ListSubDirecories(string dir)
+	public static string[] ListSubDirecories(string dir)
 	{
 		string[] dirs;
 
