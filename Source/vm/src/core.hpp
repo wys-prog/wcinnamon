@@ -191,7 +191,11 @@ namespace wcvm {
     // syscall /args... 0x21
     ftable[0x20] = [this]() {
       list<byte> mylist(8);
+      byte b = read_byte();
       
+      while (!b == 0x21) {
+        mylist.push(b);
+      }
     };
 
     ftable[0x21] = [this](){};

@@ -1,7 +1,9 @@
 #pragma once
 
+#include <string>
 #include <cstdint>
 #include <algorithm>
+#include <stdexcept>
 
 namespace wcvm {
   template <typename T>
@@ -45,6 +47,14 @@ namespace wcvm {
 
     list(uint32_t _s) : data(nullptr), mylen = 0, mycap = _s {
       resize(_s);
+    }
+
+    T &operator[](uint32_t i) {
+      if (i >= mylen) {
+        throw std::out_of_range("Too long index: " + std::to_string(i));
+      }
+      
+      return &data[i];
     }
   };
 
