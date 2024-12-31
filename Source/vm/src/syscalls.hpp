@@ -9,7 +9,7 @@
 namespace wcvm {
   void vm::init_syscalls() {
     syscalls[0x00] = [this](byte *bytes, word len) {
-      
+      // write HANDLE STRING
     };
 
   }

@@ -5,40 +5,39 @@
 #include <unordered_map>
 
 #include "vm.hpp"
-#include "list.hpp"
 
 namespace wcvm {
   /* List of all instructions 
-   * mov    [dst] [src]       -- Will move « src » into « dst »
-   * add    [dst] [src]       -- Will add « src » to « dst » 
-   * sub    [dst] [src]       -- Will subtract « dst » by « src »
-   * mul    [dst] [src]       -- Will multiply « dst » by « src »
-   * div    [dst] [src]       -- Will divide « dst » by « src »
-   * jmp    [lbl]             -- Will jump
-   * je     [lbl]             -- Will jump if it's equal
-   * jne    [lbl]             -- Will jump if it's not equal
-   * jl     [lbl]             -- Will jump if it's lesser
-   * jg     [lbl]             -- Will jump if it's grather
-   * jle    [lbl]             -- Will jump if it's lesser or equal 
-   * jge    [lbl]             -- Will jump if it's grather or equal 
-   * call   [addr]            -- Will push the current address, jump at « addr », execute the code, and recome back to the last address
-   * ret                      -- Will return the current memory address (and place it at the top of the stack)
-   * cmp    [a] [b] [addr]    -- Will compare « a » to « b ». Results in « addr »
-   * lea    [dst], [addr]     -- Will load « addr » at « dst »
-   * push   [src]             -- Will push « src » to the stack
-   * pop    [dst]             -- Will pop the top of the stack into « dst »
-   * movw   [dst] [src]       -- Will move « src » into « dst ». Operands are words.
-   * addw   [dst] [src]       -- Will add « src » to « dst ». Operands are words.
-   * subw   [dst] [src]       -- Will subtract « dst » by « src ». Operands are words.
-   * mulw   [dst] [src]       -- Will multiply « dst » by « src ». Operands are words.
-   * divw   [dst] [src]       -- Will divide « dst » by « src ». Operands are words.
-   * movd   [dst] [src]       -- Will move « src » into « dst ». Operands are dword.
-   * addd   [dst] [src]       -- Will add « src » to « dst ». Operands are dwords.
-   * subd   [dst] [src]       -- Will subtract « dst » by « src ». Operands are dwords.
-   * muld   [dst] [src]       -- Will multiply « dst » by « src ». Operands are dwords.
-   * divd   [dst] [src]       -- Will divide « dst » by « src ». Operands are dwords.
-   * syscall [n°]             -- Will call a system componant.
-   * halt                     -- Will stop the CPU
+   * mov      [dst] [src]       -- Will move « src » into « dst »
+   * add      [dst] [src]       -- Will add « src » to « dst » 
+   * sub      [dst] [src]       -- Will subtract « dst » by « src »
+   * mul      [dst] [src]       -- Will multiply « dst » by « src »
+   * div      [dst] [src]       -- Will divide « dst » by « src »
+   * jmp      [lbl]             -- Will jump
+   * je       [lbl]             -- Will jump if it's equal
+   * jne      [lbl]             -- Will jump if it's not equal
+   * jl       [lbl]             -- Will jump if it's lesser
+   * jg       [lbl]             -- Will jump if it's grather
+   * jle      [lbl]             -- Will jump if it's lesser or equal 
+   * jge      [lbl]             -- Will jump if it's grather or equal 
+   * call     [addr]            -- Will push the current address, jump at « addr », execute the code, and recome back to the last address
+   * ret                        -- Will return the current memory address (and place it at the top of the stack)
+   * cmp      [a] [b] [addr]    -- Will compare « a » to « b ». Results in « addr »
+   * lea      [dst], [addr]     -- Will load « addr » at « dst »
+   * push     [src]             -- Will push « src » to the stack
+   * pop      [dst]             -- Will pop the top of the stack into « dst »
+   * movw     [dst] [src]       -- Will move « src » into « dst ». Operands are words.
+   * addw     [dst] [src]       -- Will add « src » to « dst ». Operands are words.
+   * subw     [dst] [src]       -- Will subtract « dst » by « src ». Operands are words.
+   * mulw     [dst] [src]       -- Will multiply « dst » by « src ». Operands are words.
+   * divw     [dst] [src]       -- Will divide « dst » by « src ». Operands are words.
+   * movd     [dst] [src]       -- Will move « src » into « dst ». Operands are dword.
+   * addd     [dst] [src]       -- Will add « src » to « dst ». Operands are dwords.
+   * subd     [dst] [src]       -- Will subtract « dst » by « src ». Operands are dwords.
+   * muld     [dst] [src]       -- Will multiply « dst » by « src ». Operands are dwords.
+   * divd     [dst] [src]       -- Will divide « dst » by « src ». Operands are dwords.
+   * syscall  [n°]              -- Will call a system componant.
+   * halt                       -- Will stop the CPU
    */
 
   byte vm::read_byte() { return memory[ip++]; }
