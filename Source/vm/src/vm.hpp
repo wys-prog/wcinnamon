@@ -20,13 +20,13 @@ namespace wcvm {
 
     byte memory[std::numeric_limits<u_int32_t>::max()];
     std::unordered_map<byte, std::function<void()>> ftable;
-    std::unordered_map<std::string, u_int32_t> extfunctions;
+    std::unordered_map<byte, std::function<void()>> syscalls;
 
     void    init_table();
+    void    init_syscalls();
     byte    read_byte();
     word    read_word();
     dword   read_dword();
-    void    init(); // Will parse the memory to find external functions.
 
   public:
   };

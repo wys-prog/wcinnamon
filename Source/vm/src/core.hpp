@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "vm.hpp"
+#include "list.hpp"
 
 namespace wcvm {
   /* List of all instructions 
@@ -36,7 +37,7 @@ namespace wcvm {
    * subd   [dst] [src]       -- Will subtract « dst » by « src ». Operands are dwords.
    * muld   [dst] [src]       -- Will multiply « dst » by « src ». Operands are dwords.
    * divd   [dst] [src]       -- Will divide « dst » by « src ». Operands are dwords.
-   * labl   [name]            -- Will marque next bytes (null-terminated) as an external function.
+   * syscall [n°]             -- Will call a system componant.
    * halt                     -- Will stop the CPU
    */
 
@@ -187,39 +188,13 @@ namespace wcvm {
       memory[a] = a % b;
     };
 
-    // call_ext (typeof function.name: char (null terminated))
+    // syscall /args... 0x21
     ftable[0x20] = [this]() {
-      std::string buffer;
-      char c = (char)read_byte();
-
-      while (c) {
-        buffer += c;
-      }
-
-      if (extfunctions.find(buffer) != extfunctions.end()) {
-        ip = extfunctions[buffer];
-      } else {
-        ip = 0x00000000;
-      }
+      list<byte> mylist(8);
+      
     };
 
-    // call_wext (typeof function.name: wchar_t (null terminated))
-    ftable[0x20] = [this]() {
-      std::string buffer;
-      char c = (char)read_byte();
-
-      while (c) {
-        buffer += c;
-      }
-
-      if (extfunctions.find(buffer) != extfunctions.end()) {
-        ip = extfunctions[buffer];
-      } else {
-        ip = 0x00000000;
-      }
-    };
-
-    ftable[0x21] = [this]() {};
+    ftable[0x21] = [this](){};
 
     ftable[0xFF] = [this]() { halt = false; };
   }
