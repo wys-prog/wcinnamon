@@ -3,8 +3,13 @@
 #include <stack>
 #include <limits>
 #include <string>
+#include <sstream>
+#include <fstream>
+#include <iostream>
 #include <functional>
 #include <unordered_map>
+
+#include "list.hpp"
 
 namespace wcvm {
   typedef u_int8_t      byte;
@@ -17,10 +22,11 @@ namespace wcvm {
     byte                  cf; // Compare Flag
     std::stack<u_int32_t> st;
     bool                  halt = false;
+    std::ifstream         disk;
 
     byte memory[std::numeric_limits<u_int32_t>::max()];
     std::unordered_map<byte, std::function<void()>> ftable;
-    std::unordered_map<byte, std::function<void()>> syscalls;
+    std::unordered_map<word, std::function<void(byte *, word)>> syscalls;
 
     void    init_table();
     void    init_syscalls();
@@ -29,20 +35,13 @@ namespace wcvm {
     dword   read_dword();
 
   public:
+
+    void init() {
+      std::cout << "Wide Cinnamon Virtual Machine (WCVM)\n"
+                   "------------------------------------\n";
+      
+      init_table();
+      init_syscalls();
+    }
   };
 }
-
-/*
-  byte op;
-  op = read_byte();
-
-  if (op == 0x00) {
-    ..
-  } else if (op == 0x01)
-  {
-    ...
-  }
-
-  op 0x56
-
-*/

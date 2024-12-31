@@ -188,17 +188,23 @@ namespace wcvm {
       memory[a] = a % b;
     };
 
-    // syscall /args... 0x21
+    // syscall <id> <len> /args[len] 
     ftable[0x20] = [this]() {
-      list<byte> mylist(8);
-      byte b = read_byte();
-      
-      while (!b == 0x21) {
-        mylist.push(b);
-      }
-    };
+      byte *array;
+      word sys = read_word(); // Syscall index
+      word w = read_word();   // Count of arguments
+      array = new byte[w];
 
-    ftable[0x21] = [this](){};
+      for (word i = 0; i < w; ++i) {
+        array[i] = read_byte();
+      }
+
+      if (syscalls.find(sys) != syscalls.end()) {
+        syscalls[sys](array, w);
+      }
+
+      delete[] array;
+    };
 
     ftable[0xFF] = [this]() { halt = false; };
   }
