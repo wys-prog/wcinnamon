@@ -8,7 +8,7 @@
 
 namespace wcvm {
   void vm::init_syscalls() {
-    syscalls[0x00] = [this]() {
+    syscalls[0x0000] = [this]() {
       // write HANDLE STRING
       word handle = read_word();
       std::string string;
@@ -22,7 +22,7 @@ namespace wcvm {
       io.handles[handle].write(string);
     };
 
-    syscalls[0x01] = [this]() {
+    syscalls[0x0001] = [this]() {
       // read HANDLE LEN ADDRESS
       word handle = read_word();
       qword len = read_qword();
@@ -37,6 +37,8 @@ namespace wcvm {
 
       delete[] buff;
     };
+
+    syscalls[0x0002] = [this]() {};
 
   }
 

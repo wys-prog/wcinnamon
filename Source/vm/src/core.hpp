@@ -77,7 +77,7 @@ namespace wcvm {
         ftable[memory[ip]]();
       } else {
         std::stringstream ss;
-        ss << "Illegal instruction: " << std::hex << memory[ip] << " | ip: " << std::dec << ip << '\n';
+        ss << "Illegal instruction: " << std::uppercase << std::hex << (int)memory[ip] << " | ip: " << std::dec << ip << std::endl;
         throw std::runtime_error(ss.str());
       }
     }
@@ -110,51 +110,51 @@ namespace wcvm {
     };
 
     // jmp
-    ftable[0x07] = [this]() { ip = memory[read_dword()]; };
+    ftable[0x07] = [this]() { ip = memory[read_qword()]; };
 
     ftable[0x08] = [this]() {
-      ip = (cf == 0) ? memory[read_dword()] : ip; // don't use « ++ip ». If cf is not 0, this will increments ip, so in 
+      ip = (cf == 0) ? memory[read_qword()] : ip; // don't use « ++ip ». If cf is not 0, this will increments ip, so in 
       ip += 1;                                    // each case the ip will be memory[ip+1]. And we dont wont that.
     };
 
     ftable[0x09] = [this]() {
-      ip = (cf == 0) ? ip : memory[read_dword()];
+      ip = (cf == 0) ? ip : memory[read_qword()];
       ip += 1;
     };
 
     ftable[0x0A] = [this]() {
-      ip = (cf == 1) ? memory[read_dword()] : ip;
+      ip = (cf == 1) ? memory[read_qword()] : ip;
       ip += 1;
     };
 
     ftable[0x0B] = [this]() {
-      ip = (cf == 2) ? memory[read_dword()] : ip;
+      ip = (cf == 2) ? memory[read_qword()] : ip;
       ip += 1;
     };
 
     ftable[0x0C] = [this]() {
-      ip = (cf == 0) ? ip : memory[read_dword()];
-      ip = (cf == 1) ? memory[read_dword()] : ip;
+      ip = (cf == 0) ? ip : memory[read_qword()];
+      ip = (cf == 1) ? memory[read_qword()] : ip;
       ip += 1;
     };
 
     ftable[0x0D] = [this]() {
-      ip = (cf == 0) ? ip : memory[read_dword()];
-      ip = (cf == 2) ? memory[read_dword()] : ip;
+      ip = (cf == 0) ? ip : memory[read_qword()];
+      ip = (cf == 2) ? memory[read_qword()] : ip;
       ip += 1;
     };
 
     ftable[0x0E] = [this]() {
-      st.push(ip);
-      ip = read_dword();
+      st.push_back(ip);
+      ip = read_qword();
     };
 
     ftable[0x0F] = [this]() {
       if (st.empty()) {
         ip = 0x0000000000000000;
       } else {
-        ip = st.top();
-        st.pop();
+        ip = st.front();
+        st.pop_back();
       }
     };
 
@@ -178,14 +178,14 @@ namespace wcvm {
       memory[dst] = memory[src];
     };
 
-    ftable[0x12] = [this]() { st.push(read_dword()); };
+    ftable[0x12] = [this]() { st.push_back(read_dword()); };
 
     ftable[0x13] = [this]() {
       qword dst = read_qword();
 
       if (!st.empty()) {
-        memory[dst] = st.top();
-        st.pop();
+        memory[dst] = st.front();
+        st.pop_back();
       } else {
         dst = 0x0000000000000000;
       }
@@ -221,22 +221,13 @@ namespace wcvm {
       memory[a] = a % b;
     };
 
-    // syscall <id> <len> /args[len] 
+    // syscall <id>
     ftable[0x20] = [this]() {
-      byte *array;
-      word sys = read_word(); // Syscall index
-      word w = read_word();   // Count of arguments
-      array = new byte[w];
-
-      for (word i = 0; i < w; ++i) {
-        array[i] = read_byte();
-      }
+      word sys = read_word();      
 
       if (syscalls.find(sys) != syscalls.end()) {
-        syscalls[sys](array, w);
-      }
-
-      delete[] array;
+        syscalls[sys]();
+      } 
     };
 
     ftable[0x21] = [this]() { memory[read_qword()] = read_qword(); };

@@ -43,11 +43,15 @@ namespace wcvm {
     
 
     wcio() {
-      fnwriter w = [](const std::string &str) { std::cout << str; };
+      fnwriter w = [](const std::string &str) { std::cout << str << std::flush; };
       fnreader r = [](uint8_t *buff, uint64_t len) { std::cin.read((char*)buff, len); };
-      fnwriter wr = [](const std::string &str) { std::cerr << str; };
+      fnwriter wr = [](const std::string &str) { std::cerr << str << std::flush; };
       stdout = file(w, r);
       stderr = file(wr, r);
+    }
+
+    void open(const std::string &path) {
+
     }
   };
 
