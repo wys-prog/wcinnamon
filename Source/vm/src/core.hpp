@@ -55,18 +55,26 @@ namespace wcvm {
   }
 
   qword vm::read_qword() {
-    qword q = (memory[ip] << 56) | (memory[ip+1] << 48) | (memory[ip+2] << 40) | (memory[ip+3] << 32) |
-              (memory[ip+4] << 24) | (memory[ip+5] << 16) | (memory[ip+6] << 8) | memory[ip+7];
+    qword q = (static_cast<qword>(memory[ip])   << 56) |
+              (static_cast<qword>(memory[ip+1]) << 48) |
+              (static_cast<qword>(memory[ip+2]) << 40) |
+              (static_cast<qword>(memory[ip+3]) << 32) |
+              (static_cast<qword>(memory[ip+4]) << 24) |
+              (static_cast<qword>(memory[ip+5]) << 16) |
+              (static_cast<qword>(memory[ip+6]) << 8)  |
+               static_cast<qword>(memory[ip+7]);
     ip += 8;
     return q;
   }
 
   void vm::init_prog() {
     ip = 0;
+
     while (!halt) {
       ip += 1;
       if (ftable.find(memory[ip]) != ftable.end()) {
-        ftable[ip]();
+        std::cout << ip << '\r' << std::flush;
+        ftable[memory[ip]]();
       } else {
         std::stringstream ss;
         ss << "Illegal instruction: " << std::hex << memory[ip] << " | ip: " << std::dec << ip << '\n';
@@ -143,7 +151,7 @@ namespace wcvm {
 
     ftable[0x0F] = [this]() {
       if (st.empty()) {
-        ip = 0x00000000;
+        ip = 0x0000000000000000;
       } else {
         ip = st.top();
         st.pop();
@@ -152,11 +160,13 @@ namespace wcvm {
 
     ftable[0x10] = [this]() {
       byte a = read_byte(), b = read_byte();
-      dword addr = read_dword();
+      qword addr = read_qword();
 
       if (a == b) cf = 0;
       else if (a > b) cf = 2;
       else cf = 1;
+
+      memory[addr] = cf;
     };
 
     // lea, push, pop, halt
@@ -171,13 +181,13 @@ namespace wcvm {
     ftable[0x12] = [this]() { st.push(read_dword()); };
 
     ftable[0x13] = [this]() {
-      dword dst = read_dword();
+      qword dst = read_qword();
 
       if (!st.empty()) {
-        dst = st.top();
+        memory[dst] = st.top();
         st.pop();
       } else {
-        dst = 0x00000000;
+        dst = 0x0000000000000000;
       }
     };
 
@@ -244,7 +254,7 @@ namespace wcvm {
       memory[a] = a % b;
     };
 
-    ftable[0xFF] = [this]() { halt = false; };
+    ftable[0xFF] = [this]() { halt = true; };
   }
 
 }

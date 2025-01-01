@@ -8,6 +8,8 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
+#include <filesystem>
 #include <functional>
 #include <unordered_map>
 
@@ -24,23 +26,23 @@ namespace wcvm {
   private:
     cfg config;
     wcio io;
-    u_int32_t ip;
+    qword ip;
     byte cf; // Compare Flag
-    std::stack<uint32_t> st; // Stack
+    std::stack<uint64_t> st; // Stack
     bool halt = false;
     byte *memory;
     std::unordered_map<byte, std::function<void()>> ftable;
-    std::unordered_map<word, std::function<void(byte *, word)>> syscalls;
+    std::unordered_map<word, std::function<void()>> syscalls;
   
     void  init_table();    // core.hpp
-    void  init_syscalls(); // syscalls.hpp
-    void  init_disk();     // disk.hpp
     void  init_prog();     // core.hpp
+    void  init_disk();     // disk.hpp
+    void  init_syscalls(); // syscalls.hpp
     byte  read_byte();     // core.hpp
     word  read_word();     // core.hpp
     dword read_dword();    // core.hpp
     qword read_qword();    // core.hpp
-
+   
   public:
     void init() {
       std::cout << "------------------------------------\n"
@@ -48,7 +50,7 @@ namespace wcvm {
                    "Memory:  " << config.size_memory << " bytes\n"   
                    "Threads: " << config.thread_count << "\n"
                    "Runtime: Wys - WCVM:RT\n"
-                   "Runtime Environnement: " << config.env <<
+                   "Runtime Environnement: " << config.env << "\n"
                    "------------------------------------\n";
       
       memory = new byte[config.size_memory];
@@ -61,8 +63,6 @@ namespace wcvm {
       delete[] memory;
     }
 
-    vm(cfg &c) {
-      
-    }
+    vm(cfg &c) : config(c) { }
   };
 }
