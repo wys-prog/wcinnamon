@@ -45,12 +45,36 @@ namespace wcvm {
   word vm::read_word() {
     word w = (memory[ip] << 8) | memory[ip+1];
     ip += 2;
+    return w;
   }
 
   dword vm::read_dword() {
     dword d = (memory[ip] << 24) | (memory[ip+1] << 16) | (memory[ip+2] << 8) | memory[ip+3];
     ip += 4;
+    return d;
   }
+
+  qword vm::read_qword() {
+    qword q = (memory[ip] << 56) | (memory[ip+1] << 48) | (memory[ip+2] << 40) | (memory[ip+3] << 32)
+              (memory[ip+4] << 24) | (memory[ip+5] << 16) | (memory[ip+6] << 8) | memory[ip+7];
+    ip += 8;
+    return q;
+  }
+
+  void vm::init_prog() {
+    ip = 0;
+    while (!halt) {
+      ip += 1;
+      if (ftable.find(memory[ip]) != ftable.end()) {
+        ftable[ip]();
+      } else {
+        std::stringstream ss;
+        ss << "Illegal instruction: " << std::hex << memory[ip] << " | ip: " << std::dec << ip << '\n';
+        throw std::runtime_error(ss.str());
+      }
+    }
+  }
+
 
   void vm::init_table() {
 
@@ -203,6 +227,21 @@ namespace wcvm {
       }
 
       delete[] array;
+    };
+
+    ftable[0x21] = [this]() { memory[read_qword()] = read_qword(); };
+
+    ftable[0x22] = [this]() { memory[read_qword()] += read_qword(); };
+
+    ftable[0x23] = [this]() { memory[read_qword()] -= read_qword(); };
+
+    ftable[0x24] = [this]() { memory[read_qword()] *= read_qword(); };
+
+    ftable[0x25] = [this]() { memory[read_qword()] /= read_qword(); };
+
+    ftable[0x26] = [this]() {
+      dword a = read_qword(), b = read_qword();
+      memory[a] = a % b;
     };
 
     ftable[0xFF] = [this]() { halt = false; };
