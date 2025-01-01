@@ -145,7 +145,7 @@ namespace wcvm {
     };
 
     ftable[0x0E] = [this]() {
-      st.push_back(ip);
+      st.push(ip);
       ip = read_qword();
     };
 
@@ -153,8 +153,8 @@ namespace wcvm {
       if (st.empty()) {
         ip = 0x0000000000000000;
       } else {
-        ip = st.front();
-        st.pop_back();
+        ip = st.top();
+        st.pop();
       }
     };
 
@@ -178,14 +178,14 @@ namespace wcvm {
       memory[dst] = memory[src];
     };
 
-    ftable[0x12] = [this]() { st.push_back(read_dword()); };
+    ftable[0x12] = [this]() { st.push(read_qword()); };
 
     ftable[0x13] = [this]() {
       qword dst = read_qword();
 
       if (!st.empty()) {
-        memory[dst] = st.front();
-        st.pop_back();
+        memory[dst] = st.top();
+        st.pop();
       } else {
         dst = 0x0000000000000000;
       }

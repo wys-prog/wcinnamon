@@ -2,7 +2,7 @@
 
 #define MEMORY_MAX ((4294967295) * 2)
 
-#include <vector>
+#include <stack>
 #include <string>
 #include <cstdint>
 #include <sstream>
@@ -28,7 +28,7 @@ namespace wcvm {
     wcio io;
     qword ip;
     byte cf; // Compare Flag
-    std::vector<uint64_t> st; // Stack
+    std::stack<uint64_t> st; // Stack
     bool halt = false;
     byte *memory;
     std::unordered_map<byte, std::function<void()>> ftable;

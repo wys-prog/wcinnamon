@@ -24,7 +24,7 @@ wcvm::cfg get_config(const std::vector<std::string> &args) {
       if (m >= MEMORY_MAX) {
         std::cout << "Max memory: " << MEMORY_MAX << std::endl;
         cfg.size_memory = MEMORY_MAX;
-      } else cfg.thread_count = m;
+      } else cfg.size_memory = m;
 
     } else if (args[i] == "-t") {
 
