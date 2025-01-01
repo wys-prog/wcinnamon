@@ -9,24 +9,45 @@
 #include "vm.hpp"
 
 namespace wcvm {  
-  class IO {
+  class wcio {
+    using fnwriter = std::function<void(const std::string&)>;
+    using fnreader = std::function<void(byte *, uint32_t)>;
   private:
+
   public:
     class file {
     private:
-      std::function<void(const std::string&)> _writer;
-      std::function<void(byte *, uint32_t)> _reader;
+      fnwriter _writer;
+      fnreader _reader;
 
     public:
       void write(const std::string &s) { _writer(s); }
+      void read(byte *buff, uint32_t len) { _reader(buff, len); }
       
       file( 
-        std::function<void(const std::string&)> &writer,
-        std::function<void(byte *, uint32_t)> &reader
+        fnwriter &writer,
+        fnreader &reader
       ) : _writer(writer), _reader(reader) {}
+
+      file() = default;
     };
   
+
+
+    file stdout;
+    file stderr;
+    std::unordered_map<word, file> handles = {
+      {0xFFFE, stdout}, {0xFFFF, stderr},
+    };
     
+
+    wcio() {
+      fnwriter w = [](const std::string &str) { std::cout << str; };
+      fnreader r = [](byte *buff, uint32_t len) { std::cin.read((char*)buff, len); };
+      fnwriter wr = [](const std::string &str) { std::cerr << str; };
+      stdout = file(w, r);
+      stderr = file(wr, r);
+    }
   };
 
 }

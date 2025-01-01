@@ -11,6 +11,8 @@
 #include <functional>
 #include <unordered_map>
 
+#include "io.hpp"
+
 namespace wcvm {
   typedef uint8_t      byte;
   typedef uint16_t     word;
@@ -18,6 +20,7 @@ namespace wcvm {
 
   class vm {
   private:
+    wcio io;
     u_int32_t ip;
     byte cf; // Compare Flag
     std::stack<uint32_t> st; // Stack
