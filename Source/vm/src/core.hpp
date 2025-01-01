@@ -55,7 +55,7 @@ namespace wcvm {
   }
 
   qword vm::read_qword() {
-    qword q = (memory[ip] << 56) | (memory[ip+1] << 48) | (memory[ip+2] << 40) | (memory[ip+3] << 32)
+    qword q = (memory[ip] << 56) | (memory[ip+1] << 48) | (memory[ip+2] << 40) | (memory[ip+3] << 32) |
               (memory[ip+4] << 24) | (memory[ip+5] << 16) | (memory[ip+6] << 8) | memory[ip+7];
     ip += 8;
     return q;
