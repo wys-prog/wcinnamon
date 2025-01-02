@@ -144,11 +144,13 @@ namespace wcvm {
       ip += 1;
     };
 
+    // call
     ftable[0x0E] = [this]() {
       st.push(ip);
       ip = read_qword();
     };
 
+    // ret
     ftable[0x0F] = [this]() {
       if (st.empty()) {
         ip = 0x0000000000000000;
@@ -243,6 +245,43 @@ namespace wcvm {
     ftable[0x26] = [this]() {
       dword a = read_qword(), b = read_qword();
       memory[a] = a % b;
+    };
+
+    // cmpw
+    ftable[0x27] = [this]() {
+      word a = read_word(), b = read_word();
+      qword addr = read_qword();
+
+      if (a == b) cf = 0;
+      else if (a > b) cf = 2;
+      else cf = 1;
+
+      memory[addr] = cf;
+    };
+
+    // cmpd
+    ftable[0x28] = [this]() {
+      dword a = read_dword(), b = read_dword();
+      qword addr = read_qword();
+
+      if (a == b) cf = 0;
+      else if (a > b) cf = 2;
+      else cf = 1;
+
+      memory[addr] = cf;
+    };
+
+
+    // cmpq
+    ftable[0x29] = [this]() {
+      qword a = read_qword(), b = read_qword();
+      qword addr = read_qword();
+
+      if (a == b) cf = 0;
+      else if (a > b) cf = 2;
+      else cf = 1;
+
+      memory[addr] = cf;
     };
 
     ftable[0xFF] = [this]() { halt = true; };

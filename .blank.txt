@@ -1,0 +1,21 @@
+|  int main() {              |    main:                       |     00000000
+|    int x = 0;              |      ___local(x, 0)            |     
+|                            |                                |     
+|    if (x >= 10) {          |      mov r1, ___local(x)       |     1A 00000000 00  ; x 
+|                            |      cmp r1, 10                |     28 00000000 45  
+|                            |      jge L1                    |     0B L1
+|                            |      jmp LEND                  |     07 LEND
+|                            |                                |     
+|      return x;             |    L1:                         |     ; L1
+|                            |      mov r1, ___local(x)       |     14 00000000 00
+|                            |      ret                       |     0F
+|    }                       |                                |     
+|                            |    LEND:                       |     ; LEND
+|    return 0;               |      mov r1, 0                 |     1A 00000000 0?
+|                            |      ret                       |     0F
+|                            |                                |     FF
+|                            |                                |     ; DATA
+|                            |                                |     
+|                            |                                |     ; STACK
+|                            |                                |     
+|  }
