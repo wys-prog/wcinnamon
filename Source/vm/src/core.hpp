@@ -67,6 +67,12 @@ namespace wcvm {
     return q;
   }
 
+  void vm::write(const byte *buff, qword _len, qword _addr) {
+    for (qword i = 0; i < _len; i++) {
+      memory[_addr+i] = buff[i];
+    }
+  }
+
   void vm::init_prog() {
     ip = 0;
 

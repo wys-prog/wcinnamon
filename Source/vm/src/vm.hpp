@@ -42,6 +42,8 @@ namespace wcvm {
     word  read_word();     // core.hpp
     dword read_dword();    // core.hpp
     qword read_qword();    // core.hpp
+
+    void write(const byte *buff, qword _len, qword _addr);
    
   public:
     void init() {
