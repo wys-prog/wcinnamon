@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <wchar.h>
 #include <string>
 #include <functional>
 #include <unordered_map>
@@ -9,16 +10,15 @@
 
 namespace wcvm {
   void vm::init_syscalls() {
+    // int print(const char *_ptr);
     syscalls[0x0000] = [this]() {
-      qword string_beg = st.top(); st.pop();
-      qword i = 0;
-      std::string str;
+      qword ptr = read_qword();
+      std::string buff;
 
-      while (memory[string_beg+i]) {
-        str += memory[string_beg+i++];
-      }
+      while (memory[ptr]) buff += (char)memory[ptr++]; 
 
-      puts(str.c_str());
+      std::cout << buff << std::flush;
+      st.push(0x0000000000000000);
     };
   }
 

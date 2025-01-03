@@ -71,13 +71,13 @@ namespace wcvm {
     ip = 0;
 
     while (!halt) {
-      ip += 1;
-      if (ftable.find(memory[ip]) != ftable.end()) {
+      byte ins = read_byte();
+      if (ftable.find(ins) != ftable.end()) {
         std::cout << ip << '\r' << std::flush;
-        ftable[memory[ip]]();
+        ftable[ins]();
       } else {
         std::stringstream ss;
-        ss << "Illegal instruction: " << std::uppercase << std::hex << (int)memory[ip] << " | ip: " << std::dec << ip << std::endl;
+        ss << "Illegal instruction: " << std::uppercase << std::hex << (int)ins << " | ip: " << std::dec << ip << std::endl;
         throw std::runtime_error(ss.str());
       }
     }
@@ -89,7 +89,7 @@ namespace wcvm {
     ftable[0x00] = [this]() { return; }; // « nop » instruction.
 
     // mov 
-    ftable[0x01] = [this]() { memory[read_byte()] = read_byte(); }; 
+    ftable[0x01] = [this]() { memory[read_byte()] = read_byte(); };
 
     // add
     ftable[0x02] = [this]() { memory[read_byte()] += read_byte(); };
@@ -180,8 +180,10 @@ namespace wcvm {
       memory[dst] = memory[src];
     };
 
+    // pushq
     ftable[0x12] = [this]() { st.push(read_qword()); };
 
+    // popq
     ftable[0x13] = [this]() {
       qword dst = read_qword();
 
@@ -225,7 +227,7 @@ namespace wcvm {
 
     // syscall <id>
     ftable[0x20] = [this]() {
-      word sys = read_word();      
+      word sys = read_word();
 
       if (syscalls.find(sys) != syscalls.end()) {
         syscalls[sys]();
@@ -270,7 +272,6 @@ namespace wcvm {
 
       memory[addr] = cf;
     };
-
 
     // cmpq
     ftable[0x29] = [this]() {
