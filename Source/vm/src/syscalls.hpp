@@ -40,9 +40,9 @@ namespace wcvm {
 
 
   void vm::_syscalls_check_files() {
-    if (!std::filesystem::exists(config.env + "/libs/")) throw std::runtime_error(config.env + "/libs/: No such directory.\n");
-    if (!std::filesystem::exists(config.env + "/libs/cfg")) throw std::runtime_error(config.env + "/libs/cfg: No such file.\n");
-    if (!std::filesystem::exists(config.env + "/libs/" + get_lib_name("lib"))) throw std::runtime_error(config.env + "/libs/lib.??: No such file.\n");
+    if (!std::filesystem::exists(config.env + "/libs/")) std::cerr << std::runtime_error(config.env + "/libs/: No such directory.\n").what() << std::endl;
+    if (!std::filesystem::exists(config.env + "/libs/cfg")) std::cerr << std::runtime_error(config.env + "/libs/cfg: No such file.\n").what() << std::endl;
+    if (!std::filesystem::exists(config.env + "/libs/" + get_lib_name("lib"))) std::cerr << std::runtime_error(config.env + "/libs/lib.??: No such file.\n").what() << std::endl;
   }
 
 
@@ -50,7 +50,7 @@ namespace wcvm {
   void vm::_syscalls_load_functions() {
     std::string lib_path = config.env + "/libs/";
     std::ifstream cfg(config.env + get_lib_name("libs/lib"));
-    if (!cfg) throw std::runtime_error(config.env + "/libs/cfg: Unable to open file");
+    if (!cfg) std::cerr << std::runtime_error(config.env + "/libs/cfg: Unable to open file").what() << std::endl;
 
     std::string line;
     while (std::getline(cfg, line, ';')) {

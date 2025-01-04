@@ -8,7 +8,6 @@
 #include "disk.hpp"
 #include "core.hpp"
 #include "cfg.hpp"
-#include "io.hpp"
 #include "vm.hpp"
 
 size_t parse_memory(const std::string &value, size_t multiplier = 1) {

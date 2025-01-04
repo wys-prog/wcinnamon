@@ -180,8 +180,8 @@ namespace wcvm {
     // lea, push, pop, halt
 
     ftable[0x11] = [this]() {
-      dword src = read_dword();
-      dword dst = read_dword();
+      qword src = read_qword();
+      qword dst = read_qword();
 
       memory[dst] = memory[src];
     };
