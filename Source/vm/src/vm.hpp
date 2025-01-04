@@ -13,7 +13,6 @@
 #include <functional>
 #include <unordered_map>
 
-#include "io.hpp"
 #include "cfg.hpp"
 
 namespace wcvm {
@@ -25,7 +24,6 @@ namespace wcvm {
   class vm {
   private:
     cfg config;
-    wcio io;
     qword ip;
     byte cf; // Compare Flag
     std::stack<uint64_t> st; // Stack
