@@ -34,14 +34,16 @@ namespace wcvm {
     std::unordered_map<byte, std::function<void()>> ftable;
     std::unordered_map<word, std::function<void()>> syscalls;
   
-    void  init_table();    // core.hpp
-    void  init_prog();     // core.hpp
-    void  init_disk();     // disk.hpp
-    void  init_syscalls(); // syscalls.hpp
-    byte  read_byte();     // core.hpp
-    word  read_word();     // core.hpp
-    dword read_dword();    // core.hpp
-    qword read_qword();    // core.hpp
+    void  init_table();               // core.hpp
+    void  init_prog();                // core.hpp
+    void  init_disk();                // disk.hpp
+    void  init_syscalls();            // syscalls.hpp
+    void  _syscalls_check_files();    // syscalls.hpp
+    void  _syscalls_load_functions(); // syscalls.hpp
+    byte  read_byte();                // core.hpp
+    word  read_word();                // core.hpp
+    dword read_dword();               // core.hpp
+    qword read_qword();               // core.hpp
 
     void write(const byte *buff, qword _len, qword _addr);
    
